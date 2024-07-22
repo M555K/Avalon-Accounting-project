@@ -1,5 +1,7 @@
 package com.company.dto;
 
+import com.company.entity.Address;
+import com.company.enums.CompanyStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -11,15 +13,12 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressDto {
+public class CompanyDto {
     private Long id;
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String country;
-    private String state;
-    private String zipCode;
-
-
+    private CompanyStatus companyStatus;
+    private String phone;
+    private String title;
+    private String website;
+    private AddressDto address;
 
 }
