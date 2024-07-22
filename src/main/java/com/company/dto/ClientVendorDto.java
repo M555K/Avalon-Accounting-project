@@ -18,7 +18,6 @@ import javax.persistence.Enumerated;
 public class ClientVendorDto {
     private Long id;
     private String clientVendorName;
-    @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
     private String phone;
     private String website;
