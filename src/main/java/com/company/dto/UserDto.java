@@ -20,8 +20,28 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private Boolean enabled;
-    @JsonProperty(Re)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String confirmPassword;
     private String phone;
     private String username;
+
+    public void setPassword(String passWord) {
+        this.password = passWord;
+        checkConfirmPassword();
+    }
+
+    public void setConfirmPassword(String confirmPassWord) {
+        this.confirmPassword = confirmPassWord;
+        checkConfirmPassword();
+    }
+
+    private void checkConfirmPassword() {
+        if (this.password == null || this.confirmPassword == null) {
+            return;
+        } else if (!this.password.equals(this.confirmPassword)) {
+            this.confirmPassword = null;
+        }
+    }
 }
