@@ -19,14 +19,15 @@ public class UserDto {
     private Long id;
     private String firstname;
     private String lastname;
-    private Boolean enabled;
+    private String username;
+    private String phone;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
-    private String phone;
-    private String username;
-
+    private RoleDto role;
+    private CompanyDto company;
+// only admin can create the company
     public void setPassword(String passWord) {
         this.password = passWord;
         checkConfirmPassword();
