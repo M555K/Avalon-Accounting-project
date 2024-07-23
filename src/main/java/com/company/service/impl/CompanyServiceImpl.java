@@ -8,6 +8,9 @@ import com.company.service.CompanyService;
 import com.company.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -28,5 +31,12 @@ public class CompanyServiceImpl implements CompanyService {
         return mapperUtil.convert(foundCompany, new CompanyDto());
 
 
+    }
+
+    @Override
+    public List<CompanyDto> findAllCompanies() {
+
+        List<Company> allCompanies = companyRepository.findAll();
+        return mapperUtil.convert(allCompanies, new ArrayList<CompanyDto>());
     }
 }
