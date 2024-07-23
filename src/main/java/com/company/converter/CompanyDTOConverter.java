@@ -19,4 +19,5 @@ public class CompanyDTOConverter implements Converter <Long, CompanyDto> {
     public CompanyDto convert(Long source) {
         return companyService.findById(source);
     }
+
 }
