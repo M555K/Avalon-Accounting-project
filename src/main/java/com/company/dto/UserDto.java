@@ -27,7 +27,7 @@ public class UserDto {
     private String confirmPassword;
     private RoleDto role;
     private CompanyDto company;
-    private boolean isOnlyAdmin;
+    private Boolean isOnlyAdmin;
 
     public void setPassword(String passWord) {
         this.password = passWord;
