@@ -1,5 +1,6 @@
 package com.company.dto;
 
+import com.company.enums.ProductUnit;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -15,5 +16,9 @@ public class ProductDto {
     private Long id;
     private CategoryDto category;
     private String name;
+    private Integer quantityInStock;
+    private Integer lowLimitAlert;
+    private Boolean hasProduct;
+    private ProductUnit productUnit;
     
 }
