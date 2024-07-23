@@ -27,7 +27,8 @@ public class UserDto {
     private String confirmPassword;
     private RoleDto role;
     private CompanyDto company;
-// only admin can create the company
+    private boolean isOnlyAdmin;
+
     public void setPassword(String passWord) {
         this.password = passWord;
         checkConfirmPassword();
