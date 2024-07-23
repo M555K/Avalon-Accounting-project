@@ -24,8 +24,10 @@ public class ClientVendor extends BaseEntity {
     private String phone;
     private String website;
     @ManyToOne
+    @JoinColumn(name = "address_id")
     private Address address;
     @ManyToOne// ask if One vendor to one address
+    @JoinColumn(name = "company_id")
     private Company company;
 
 }

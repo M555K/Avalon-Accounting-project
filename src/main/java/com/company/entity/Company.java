@@ -27,5 +27,6 @@ public class Company extends BaseEntity {
     private String title;
     private String website;
     @ManyToOne
+    @JoinColumn(name = "address_id")
     private Address address;
 }

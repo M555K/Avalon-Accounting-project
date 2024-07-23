@@ -9,10 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Getter
@@ -35,8 +32,10 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String username;
     @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
     @ManyToOne
+    @JoinColumn(name = "company_id")
     private Company company;
 
 }
