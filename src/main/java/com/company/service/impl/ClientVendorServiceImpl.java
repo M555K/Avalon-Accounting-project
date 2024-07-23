@@ -2,6 +2,8 @@ package com.company.service.impl;
 
 import com.company.dto.ClientVendorDto;
 import com.company.entity.ClientVendor;
+import com.company.exeptions.ClientVendorNotFoundException;
+import com.company.exeptions.UserNotFountException;
 import com.company.repository.ClientVendorRepository;
 import com.company.service.ClientVendorService;
 import com.company.util.MapperUtil;
@@ -33,6 +35,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto findById(Long id) {
-        return  mapperUtil.convert(clientVendorRepository.findById(id), new ClientVendorDto());
+        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow(()-> new ClientVendorNotFoundException("Client/Vendor not found..."));
+
+        return null;
     }
 }
