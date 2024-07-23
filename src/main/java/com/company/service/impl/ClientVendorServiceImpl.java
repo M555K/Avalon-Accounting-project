@@ -5,6 +5,7 @@ import com.company.entity.ClientVendor;
 import com.company.repository.ClientVendorRepository;
 import com.company.service.ClientVendorService;
 import com.company.util.MapperUtil;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     private final MapperUtil mapperUtil;
    private final ClientVendorRepository clientVendorRepository;
 
-    public ClientVendorServiceImpl(MapperUtil mapperUtil, ClientVendorRepository clientVendorRepository) {
+    public ClientVendorServiceImpl(MapperUtil mapperUtil,@Lazy ClientVendorRepository clientVendorRepository) {
         this.mapperUtil = mapperUtil;
         this.clientVendorRepository = clientVendorRepository;
     }
