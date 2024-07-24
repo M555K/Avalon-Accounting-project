@@ -1,5 +1,8 @@
 package com.company.service.impl;
 
+import com.company.dto.InvoiceProductDto;
+import com.company.entity.InvoiceProduct;
+import com.company.repository.InvoiceProductRepository;
 import com.company.service.InvoiceProductService;
 import com.company.util.MapperUtil;
 import org.springframework.stereotype.Service;
