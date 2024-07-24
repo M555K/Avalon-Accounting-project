@@ -6,7 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CompanyDTOConverter implements Converter <Long, CompanyDto> {
+public class CompanyDTOConverter implements Converter <String, CompanyDto> {
 
     private final CompanyService companyService;
 
@@ -16,8 +16,8 @@ public class CompanyDTOConverter implements Converter <Long, CompanyDto> {
 
 
     @Override
-    public CompanyDto convert(Long source) {
-        return companyService.findById(source);
+    public CompanyDto convert(String source) {
+        return companyService.findById(Long.parseLong(source));
     }
 
 }
