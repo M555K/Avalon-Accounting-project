@@ -3,7 +3,6 @@ package com.company.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -11,7 +10,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/").setViewName("login");
-      //  registry.addViewController("/").setViewName("dashboard");
         registry.addViewController("/dashboard").setViewName("dashboard");
         registry.addViewController("/users/list").setViewName("user/user-list");
         registry.addViewController("/companies/list").setViewName("company/company-list");

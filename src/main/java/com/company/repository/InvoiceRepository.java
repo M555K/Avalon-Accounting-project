@@ -1,5 +1,6 @@
 package com.company.repository;
 
+import com.company.entity.Company;
 import com.company.entity.Invoice;
 import com.company.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +12,13 @@ import java.util.Optional;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
-    List<Invoice> findAllByInvoiceTypeOrderByInvoiceNoDesc(InvoiceType invoiceType);
 
     Optional<Invoice> findInvoiceById(Long id);
+
+    List<Invoice> findAllByCompanyAndInvoiceTypeOrderByInvoiceNoDesc(Company company, InvoiceType invoiceType);
+
+    List<Invoice> findAllByInvoiceType(InvoiceType invoiceType);
 }
+
+
 
