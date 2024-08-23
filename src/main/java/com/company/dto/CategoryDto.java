@@ -1,17 +1,26 @@
 package com.company.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.company.annotation.UniqueValue;
+import com.company.entity.Category;
 import lombok.*;
-@NoArgsConstructor
-@AllArgsConstructor
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
-@JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class CategoryDto {
+
     private Long id;
+
+    @UniqueValue(entity = Category.class, field = "category", message = "Description must be unique.")
+    @NotBlank(message = "Description is a required field.")
+    @Size(max = 100, min = 2, message = "Description must be between 2 and 100 characters.")
     private String description;
     private CompanyDto company;
+    private boolean hasProduct;
+
 }

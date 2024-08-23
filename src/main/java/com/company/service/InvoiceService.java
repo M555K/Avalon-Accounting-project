@@ -1,24 +1,34 @@
 package com.company.service;
 
 import com.company.dto.InvoiceDto;
+import com.company.dto.InvoiceProductDto;
+import com.company.entity.Invoice;
+import com.company.enums.InvoiceStatus;
 import com.company.enums.InvoiceType;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 
 public interface InvoiceService {
 
-
-
-    List<InvoiceDto> listAllByCompanyAndInvoiceType(InvoiceType invoiceType);
-
+    List<InvoiceDto> listAllInvoicesByType(InvoiceType invoiceType);
 
     InvoiceDto findById(Long id);
 
-    List<InvoiceDto> listAllByInvoiceType(InvoiceType invoiceType);
+    Invoice save(InvoiceDto invoiceDto, InvoiceType invoiceType);
 
-    BigDecimal getTotalPriceOfInvoice(InvoiceDto invoiceDto);
+    String generateNextInvoiceNo(InvoiceType invoiceType);
 
-    BigDecimal getTotalTaxOfInvoice(InvoiceDto invoiceDto);
+   InvoiceDto createNewInvoice(InvoiceType invoiceType);
 
+    void update(InvoiceDto invoiceDto, InvoiceType invoiceType);
+
+    void delete(Long id);
+
+    void approve(Long id);
+
+    boolean hasInvoicesByClientVendorId(Long clientVendorId);
+
+    List<InvoiceDto> showLastThreeApprovedInvoices(InvoiceStatus invoiceStatus);
+    void checkIfInvoiceCanBeApproved(InvoiceProductDto invoiceProductDto);
 }

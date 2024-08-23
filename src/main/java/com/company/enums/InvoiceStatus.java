@@ -10,5 +10,4 @@ public enum InvoiceStatus {
     InvoiceStatus(String value) {
         this.value = value;
     }
-
 }

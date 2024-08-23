@@ -6,9 +6,10 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryDTOConverter implements Converter <String, CategoryDto> {
+public class CategoryDTOConverter implements Converter<String, CategoryDto> {
 
-    private final CategoryService categoryService;
+
+    CategoryService categoryService;
 
     public CategoryDTOConverter(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -16,6 +17,15 @@ public class CategoryDTOConverter implements Converter <String, CategoryDto> {
 
     @Override
     public CategoryDto convert(String source) {
-        return categoryService.findCategoryById(Long.parseLong(source));
+
+        if (source == null || source.equals("")) {
+            return null;
+        }
+
+        return categoryService.findById(Long.valueOf(source));
     }
+
+
+
+
 }

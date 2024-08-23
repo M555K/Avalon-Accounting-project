@@ -35,5 +35,4 @@ public class BaseEntityListener extends AuditingEntityListener {
         }
         // dynamically check whoever is login into the system
     }
-
 }

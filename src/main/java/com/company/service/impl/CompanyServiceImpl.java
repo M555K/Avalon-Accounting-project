@@ -1,60 +1,169 @@
 package com.company.service.impl;
 
 import com.company.dto.CompanyDto;
+import com.company.dto.UserDto;
+import com.company.entity.Address;
 import com.company.entity.Company;
-import com.company.exeptions.CompanyNotFoundException;
+import com.company.entity.User;
+import com.company.enums.CompanyStatus;
+import com.company.exception.CompanyNotFoundException;
+import com.company.repository.AddressRepository;
 import com.company.repository.CompanyRepository;
+import com.company.repository.UserRepository;
 import com.company.service.CompanyService;
+import com.company.service.SecurityService;
 import com.company.util.MapperUtil;
+import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Service;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@EqualsAndHashCode
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
     private final MapperUtil mapperUtil;
+    private final SecurityService securityService;
+    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService, UserRepository userRepository, AddressRepository addressRepository) {
         this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
+        this.userRepository = userRepository;
+        this.addressRepository = addressRepository;
     }
 
+    @Override
+    public CompanyDto getCompanyByLoggedInUser() {
+        return securityService.getLoggedInUser().getCompany();
+    }
+
+    @Override
+    public CompanyDto save(CompanyDto dto) {
+
+        if (companyRepository.existsByTitle(dto.getTitle())) {
+            throw new IllegalArgumentException("Title must be unique.");
+        }
+        Address address = mapperUtil.convert(dto.getAddress(), new Address());
+        addressRepository.save(address);
+
+        Company company = mapperUtil.convert(dto, new Company());
+        company.setAddress(address);
+        company.setCompanyStatus(CompanyStatus.PASSIVE);
+        Company savedCompany = companyRepository.save(company);
+
+        return mapperUtil.convert(savedCompany,dto);
+    }
+
+    @Override
+    public CompanyDto update(CompanyDto dto) {
+        Company company = companyRepository.findById(dto.getId())
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with ID: " + dto.getId()));
+
+        if (companyRepository.existsByTitleIgnoreCaseAndIdNot(dto.getTitle(), dto.getId())) {
+            throw new IllegalArgumentException("Title must be unique.");
+        }
+
+        Address address = mapperUtil.convert(dto.getAddress(), new Address());
+        addressRepository.save(address);
+
+        Company updatedCompany = mapperUtil.convert(dto, company);
+        updatedCompany.setAddress(address);
+        updatedCompany.setId(company.getId());
+        updatedCompany.setCompanyStatus(company.getCompanyStatus());
+        companyRepository.save(updatedCompany);
+
+        return mapperUtil.convert(updatedCompany,dto);
+    }
+
+    @Override
+    public void activateCompany(Long companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with ID: " + companyId));
+        company.setCompanyStatus(CompanyStatus.ACTIVE);
+        companyRepository.save(company);
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            user.setIsDeleted(false);
+        }
+        userRepository.saveAll(users);
+    }
+
+    @Override
+    public void deactivateCompany(Long companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with ID: " + companyId));
+        company.setCompanyStatus(CompanyStatus.PASSIVE);
+        companyRepository.save(company);
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            user.setIsDeleted(true);
+        }
+        userRepository.saveAll(users);
+    }
+
+    @Override
+    public List<CompanyDto> getCompaniesByStatus(CompanyStatus status) {
+
+        return companyRepository.findAll()
+                .stream()
+                .filter(company ->
+                        company.getCompanyStatus().equals(status))
+                .map(company ->
+                        mapperUtil.convert(company, new CompanyDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CompanyDto> getCompaniesSortedByStatusAndTitle() {
+
+        return Stream.concat(
+                        getCompaniesByStatus(CompanyStatus.ACTIVE)
+                                .stream()
+                                .sorted(Comparator.comparing(CompanyDto::getTitle))
+                        ,
+                        getCompaniesByStatus(CompanyStatus.PASSIVE)
+                                .stream()
+                                .sorted(Comparator.comparing(CompanyDto::getTitle)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CompanyDto> getCompaniesExcluding(Long id) {
+        return getCompaniesSortedByStatusAndTitle()
+                .stream()
+                .filter(companyDto -> !companyDto.getId().equals(id))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CompanyDto> getAdminCompanies() {
+        UserDto currentUser = securityService.getLoggedInUser();
+        List<Company> companyList = companyRepository.findAll();
+
+        if(currentUser.getRole().getDescription().equalsIgnoreCase("Root User")){
+            return getCompaniesExcluding(currentUser.getCompany().getId());
+
+        } else  {
+            return companyList.stream()
+                    .filter(company -> company.getTitle().equalsIgnoreCase(currentUser.getCompany().getTitle()))
+                    .map(company -> mapperUtil.convert(company, new CompanyDto()))
+                    .collect(Collectors.toList());
+        }
+    }
 
     @Override
     public CompanyDto findById(Long id) {
-
-        Company foundCompany = companyRepository.findCompanyById(id).orElseThrow(() -> new CompanyNotFoundException("No Address Found!"));
-
-        return mapperUtil.convert(foundCompany, new CompanyDto());
-
-
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found with ID: " + id));
+        return mapperUtil.convert(companyRepository.findById(id), new CompanyDto());
     }
 
-    @Override
-    public List<CompanyDto> findAllCompanies() {
-        // Fetch all companies from the repository
-        List<Company> allCompanies = companyRepository.findAll();
-
-        // Filter out the "CYDEO" company (ID=1)
-        List<CompanyDto> companyDtos = allCompanies.stream()
-                .filter(company -> company.getId() != 1) // Exclude company with ID=1
-                .map(company -> mapperUtil.convert(company, new CompanyDto()))
-                .collect(Collectors.toList());
-
-        // Sorting by status (Active first) and then by title
-        companyDtos.sort(Comparator.comparing((CompanyDto c) -> {
-                    if (c.getCompanyStatus().getValue().equals("Active")) {
-                        return 0;  // Active companies first
-                    } else {
-                        return 1;  // Passive companies after
-                    }
-                })
-                .thenComparing(CompanyDto::getTitle));
-
-        return companyDtos;
-    }
-    }
+}
 

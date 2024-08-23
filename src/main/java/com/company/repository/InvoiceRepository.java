@@ -1,9 +1,10 @@
 package com.company.repository;
 
-import com.company.entity.Company;
 import com.company.entity.Invoice;
+import com.company.enums.InvoiceStatus;
 import com.company.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,13 +13,17 @@ import java.util.Optional;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
+    List<Invoice> findAllByOrderByInvoiceNoDesc();
 
     Optional<Invoice> findInvoiceById(Long id);
 
-    List<Invoice> findAllByCompanyAndInvoiceTypeOrderByInvoiceNoDesc(Company company, InvoiceType invoiceType);
+    @Query("select i from Invoice i where i.invoiceType=?1 and i.company.id=?2 and i.isDeleted=false order by i.invoiceNo desc")
+    List<Invoice> listAllByInvoiceTypeAndCompanyId(InvoiceType invoiceType, Long companyId);
 
-    List<Invoice> findAllByInvoiceType(InvoiceType invoiceType);
+    @Query("SELECT max(i.invoiceNo) FROM Invoice i WHERE i.invoiceType= ?2 AND i.company.id = ?1")
+    String findLatestInvoiceNumber(Long companyId, InvoiceType invoiceType);
+
+    List<Invoice> findInvoicesByClientVendorId(Long clientVendorId);
+
+    List<Invoice> findTop3ByCompanyIdAndInvoiceStatusOrderByDateDesc(Long companyId, InvoiceStatus invoiceStatus);
 }
-
-
-

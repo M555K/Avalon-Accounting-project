@@ -134,14 +134,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Role</label>
-                                                                    <select class="custom-select" id="role" name="role"
+                                                                    <select th:field="*{role.id}" class="custom-select" id="role" name="role"
                                                                             th:with="role=*{role}"
                                                                             th:readonly="${user.isOnlyAdmin}">
                                                                         <option th:each="role:${userRoles}"
                                                                                 th:value="${role.id}"
                                                                                 th:text="${role.description}"
                                                                                 th:selected="${role.id} == *{role.id}"
-                                                                                ></option>
+                                                                        ></option>
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('role')}">
                                                                         <ul>

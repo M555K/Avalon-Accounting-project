@@ -1,49 +1,81 @@
 package com.company.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import javax.persistence.Column;
+import javax.validation.constraints.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
-@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class UserDto {
-    @JsonIgnore
-    private Long id;
-    private String firstname;
-    private String lastname;
-    private String username;
-    private String phone;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String confirmPassword;
-    private RoleDto role;
-    private CompanyDto company;
-    private Boolean isOnlyAdmin;
 
-    public void setPassword(String passWord) {
-        this.password = passWord;
-        checkConfirmPassword();
-    }
 
-    public void setConfirmPassword(String confirmPassWord) {
-        this.confirmPassword = confirmPassWord;
-        checkConfirmPassword();
-    }
 
-    private void checkConfirmPassword() {
-        if (this.password == null || this.confirmPassword == null) {
-            return;
-        } else if (!this.password.equals(this.confirmPassword)) {
-            this.confirmPassword = null;
-        }
-    }
+   private Long id;
+
+
+
+   @NotBlank(message = "Email is a required field.")
+   @Email(message = "Please provide a valid email address.")
+   @Column(name="username",nullable = false)
+   private String username;
+
+
+   @NotBlank(message = "Password is a required field.")
+   @Pattern(
+           regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d\\W]).{4,}$",
+           message = "Password should be at least 4 characters long and needs to contain 1 capital letter, 1 small letter and 1 special character or number."
+   )
+   private String password;
+public void setPassword(String password) {
+   this.password = password;
+   checkConfirmPassword();
 }
+
+   @NotBlank(message = "Password should match.")
+   private String confirmPassword;
+
+   public void setConfirmPassword(String confirmPassword) {
+      this.confirmPassword = confirmPassword;
+      checkConfirmPassword();
+   }
+
+
+   @NotBlank(message = "First Name is a required field.")
+   @Size(min = 2, max = 50, message = "First Name must be between 2 and 50 characters long.")
+   private String firstname;
+
+   @NotBlank(message = "Last Name is a required field.")
+   @Size(min = 2, max = 50, message = "Last Name must be between 2 and 50 characters long.")
+   @Column(name = "lastName", nullable = false)
+   private String lastname;
+
+   @Pattern(
+           regexp = "^(\\+\\d{1,2}\\s)?\\(\\d{3}\\)\\s\\d{3}-\\d{4}$|^(\\+\\d{1,2}\\s)?\\d{10}$|^(\\+\\d{1,2}\\s)?\\d{3}[-.\\s]?\\d{3}[-.\\s]?\\d{4}$",
+           message = "Phone Number is required field and must be in a valid phone number format."
+   )
+   @NotBlank
+   private  String phone;
+
+   @NotNull(message = "Please select a Role.")
+   private  RoleDto role;
+
+   @NotNull(message = "Please select a Company.")
+   private CompanyDto company;
+
+   private boolean isOnlyAdmin;
+
+
+
+   private void checkConfirmPassword() {
+      if (this.password == null || this.confirmPassword == null) {
+         return;
+      } else if (!this.password.equals(this.confirmPassword)) {
+         this.confirmPassword = null;
+      }
+   }
+   }
+

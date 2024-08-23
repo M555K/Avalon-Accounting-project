@@ -1,14 +1,23 @@
 package com.company.service;
 
 import com.company.dto.CompanyDto;
-import org.springframework.stereotype.Service;
+import com.company.enums.CompanyStatus;
 
 import java.util.List;
 
-
 public interface CompanyService {
+   CompanyDto getCompanyByLoggedInUser();
+   CompanyDto save(CompanyDto dto);
+   CompanyDto update(CompanyDto dto);
 
-    CompanyDto findById (Long id);
+   List<CompanyDto> getCompaniesByStatus (CompanyStatus status);
+   List<CompanyDto> getCompaniesSortedByStatusAndTitle();
+   List<CompanyDto> getCompaniesExcluding(Long id);
+   List<CompanyDto> getAdminCompanies();
 
-    List<CompanyDto> findAllCompanies();
+   CompanyDto findById(Long id);
+  
+   void activateCompany(Long companyId);
+   void deactivateCompany(Long companyId);
+
 }

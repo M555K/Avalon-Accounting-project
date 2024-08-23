@@ -2,32 +2,27 @@ package com.company.entity;
 
 import com.company.entity.common.BaseEntity;
 import com.company.enums.ClientVendorType;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "clients_vendors")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Where(clause = "is_deleted=false")
 public class ClientVendor extends BaseEntity {
     private String clientVendorName;
-    @Enumerated(EnumType.STRING)
-    private ClientVendorType clientVendorType;
     private String phone;
     private String website;
-    @ManyToOne
-    @JoinColumn(name = "address_id")
+    @Enumerated(EnumType.STRING)
+    private ClientVendorType clientVendorType;
+    @OneToOne
     private Address address;
-    @ManyToOne// ask if One vendor to one address
-    @JoinColumn(name = "company_id")
+    @ManyToOne
     private Company company;
-
 }

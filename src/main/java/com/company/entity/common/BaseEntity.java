@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(BaseEntityListener.class)
 public class BaseEntity implements Serializable {
 
     @Id
@@ -35,4 +34,5 @@ public class BaseEntity implements Serializable {
     public Long lastUpdateUserId;
 
     private Boolean isDeleted = false;
+
 }

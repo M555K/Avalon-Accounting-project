@@ -2,23 +2,21 @@ package com.company.dto;
 
 import com.company.enums.InvoiceStatus;
 import com.company.enums.InvoiceType;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class InvoiceDto {
+@NoArgsConstructor
+@AllArgsConstructor
 
+public class InvoiceDto {
     private Long id;
     private String invoiceNo;
     private InvoiceStatus invoiceStatus;
@@ -30,5 +28,6 @@ public class InvoiceDto {
     private BigDecimal price;
     private BigDecimal tax;
     private BigDecimal total;
+
 
 }

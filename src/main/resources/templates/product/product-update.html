@@ -21,6 +21,7 @@
                                         <div class="tab-content">
                                             <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
                                                  aria-labelledby="account-tab">
+
                                                 <form th:action="@{/products/update/{id}(id=${product.getId()})}"
                                                       th:method="post" th:object="${product}">
                                                     <div class="row">

@@ -4,10 +4,16 @@ import com.company.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface CategoryRepository extends JpaRepository <Category,Long> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Optional<Category> findById(Long id);
+    List<Category> findAllByCompanyId(Long companyId);
+
+    List<Category> findAllByCompanyIdAndIsDeleted(Long companyId, Boolean isDeleted);
+
+    Category findByIdAndIsDeleted(Long id, boolean b);
+
+    boolean existsByDescription(String description);
 }

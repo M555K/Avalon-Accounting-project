@@ -66,8 +66,8 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Username (email)</label>
-                                                                    <input type="email" th:field="*{username}"
-                                                                           placeholder="e-mail" class="form-control">
+                                                                        <input type="email" th:field="*{username}"
+                                                                               placeholder="e-mail" class="form-control">
                                                                     <div th:if="${#fields.hasErrors('username')}">
                                                                         <ul>
                                                                             <li class="validation" th:each="err : ${#fields.errors('username')}"
@@ -133,7 +133,7 @@
                                                                     <label>Role</label>
                                                                     <select id="role" name="role" class="custom-select"
                                                                             th:with="role=*{role}">
-                                                                        <option th:if="${userRoles.size() > 1}"
+                                                                        <option th:if="${userRoles != null and userRoles.size() > 1}"
                                                                                 th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="role:${userRoles}"
@@ -155,8 +155,8 @@
                                                                 <div class="controls">
                                                                     <label>Company</label>
                                                                     <select id="company" name="company" class="custom-select"
-                                                                            th:field="*{company}">
-                                                                        <option th:if="${companies.size() > 1}"
+                                                                                                         th:field="*{company}">
+                                                                        <option th:if="${companies != null and companies.size() > 1}"
                                                                                 th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="company:${companies}"
@@ -174,7 +174,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
                                                     <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
                                                         <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
                                                                 type="submit" name="action" value="save">Save
@@ -183,6 +182,7 @@
                                                                 type="reset">
                                                             Reset
                                                         </button>
+                                                    </div>
                                                     </div>
                                                 </form>
                                             </div>

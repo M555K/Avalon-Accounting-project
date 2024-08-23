@@ -1,13 +1,14 @@
 package com.company.controller;
 
 import com.company.dto.ClientVendorDto;
-import com.company.dto.CompanyDto;
+import com.company.enums.ClientVendorType;
 import com.company.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -21,10 +22,55 @@ public class ClientVendorController {
     }
 
     @GetMapping("/list")
-    public String listAllCompanies(Model model){
-        List<ClientVendorDto> allClientVendors = clientVendorService.listAllClientVendors();
-        model.addAttribute("clientVendors",allClientVendors);
+    public String listAllClientVendors(Model model) {
+        model.addAttribute("clientVendors", clientVendorService.findClientVendorsByCompanyIdAndClientVendorType());
         return "/clientVendor/clientVendor-list";
     }
+
+    @GetMapping("/create")
+    public String createClientVendor(Model model) {
+        model.addAttribute("newClientVendor", new ClientVendorDto());
+        model.addAttribute("clientVendorTypes", List.of(ClientVendorType.values()));
+        return "/clientVendor/clientVendor-create";
+    }
+
+    @PostMapping("create")
+    public String createClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDto clientVendor, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clientVendorTypes", List.of(ClientVendorType.values()));
+            return "/clientVendor/clientVendor-create";
+        }
+        clientVendorService.saveClientVendor(clientVendor);
+        return "redirect:/clientVendors/list";
+    }
+
+    @GetMapping("/update/{clientVendorId}")
+    public String updateClientVendor(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
+
+        model.addAttribute("clientVendor", clientVendorService.findById(clientVendorId));
+        model.addAttribute("clientVendorTypes", List.of(ClientVendorType.values()));
+        return "/clientVendor/clientVendor-update";
+    }
+
+    @PostMapping("/update/{clientVendorId}")
+    public String saveUpdatedClientVendor(@Valid @PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendor, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clientVendorTypes", List.of(ClientVendorType.values()));
+            return "/clientVendor/clientVendor-update";
+        }
+        clientVendor.setId(clientVendorId);
+        clientVendorService.updateClientVendor(clientVendor);
+        return "redirect:/clientVendors/list";
+    }
+
+    @GetMapping("/delete/{clientVendorId}")
+    public String deleteClientVendor(@PathVariable("clientVendorId") Long id) {
+
+        clientVendorService.deleteClientVendor(id);
+
+        return "redirect:/clientVendors/list";
+    }
+
 
 }

@@ -1,24 +1,39 @@
 package com.company.dto;
 
 import com.company.enums.ProductUnit;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
-@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
+
     private Long id;
-    private CategoryDto category;
+
+    @NotBlank(message = "{name.notBlank}")
+    @Size(min = 2, max = 100, message = "{name.size}")
     private String name;
+
     private Integer quantityInStock;
+
+    @NotNull(message = "{lowLimitAlert.notnull}")
+    @Min(value = 1, message = "{lowLimitAlert.min}")
     private Integer lowLimitAlert;
-    private Boolean hasProduct;
+
+    @NotNull(message = "{productUnit.notNull}")
     private ProductUnit productUnit;
-    
+
+    @NotNull(message = "{category.notNull}")
+    private CategoryDto category;
+    private boolean hasInvoiceProduct;
+
 }

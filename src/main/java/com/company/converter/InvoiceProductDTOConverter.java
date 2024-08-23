@@ -6,7 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InvoiceProductDTOConverter implements Converter<String, InvoiceProductDto> {
+public class InvoiceProductDTOConverter implements Converter <String, InvoiceProductDto> {
 
     private final InvoiceProductService invoiceProductService;
 
@@ -14,10 +14,10 @@ public class InvoiceProductDTOConverter implements Converter<String, InvoiceProd
         this.invoiceProductService = invoiceProductService;
     }
 
-    //  @Override
-    //  public InvoiceProductDto convert(Long source) {
-    //      return invoiceProductService.findInvoiceProductById(source);
-    //  }
+ //  @Override
+ //  public InvoiceProductDto convert(Long source) {
+ //      return invoiceProductService.findInvoiceProductById(source);
+ //  }
 
     @Override
     public InvoiceProductDto convert(String source) {
@@ -27,4 +27,3 @@ public class InvoiceProductDTOConverter implements Converter<String, InvoiceProd
         return invoiceProductService.findInvoiceProductById(Long.parseLong(source));
     }
 }
-

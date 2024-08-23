@@ -1,9 +1,12 @@
 package com.company.converter;
 
+
 import com.company.dto.UserDto;
 import com.company.service.UserService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserDTOConverter implements Converter<String, UserDto> {
 
     private final UserService userService;
