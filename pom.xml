@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.company</groupId>
-    <artifactId>Accounting-project-selfpractice</artifactId>
+    <artifactId>Accounting-Rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Accounting-project-selfpractice</name>
     <description>Accounting-project-selfpractice</description>
